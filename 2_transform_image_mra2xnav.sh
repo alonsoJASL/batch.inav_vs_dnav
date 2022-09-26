@@ -7,7 +7,8 @@ if [ $# -eq 0 ] ; then
 fi
 
 SCRIPT_DIR=$( cd -- $( dirname -- ${BASH_SOURCE[0]}  ) &> /dev/null && pwd )
-MIRTK_DIR="$HOME/syncdir/cemrgapp_prebuilds/v2018.04.2/linux/Externals/MLib"
+# MIRTK_DIR="$HOME/syncdir/cemrgapp_prebuilds/v2018.04.2/linux/Externals/MLib"
+MIRTK_DIR="$HOME/dev/libraries/MLib" # macOS
 
 DIR=$1
 N=$2
@@ -25,4 +26,5 @@ echo "DOF FILE: $dof"
 echo "OUTPUT  : $lareg"
 
 # echo "$MIRTK_DIR/transform-image $MRA/$la $LGE_DIR/$lareg -dofin $LGE_DIR/$xnav -interp NN "
-$MIRTK_DIR/transform-image $MRA_DI$MIRTK_DIR/transform-image $MRA/$la $LGE_DIR/$lareg -dofin $LGE_DIR/$xnav -interp NN R/$la $LGE_DIR/$lareg -dofin $LGE_DIR/$dof -interp NN
+$MIRTK_DIR/transform-image $MRA_DIR/$la $LGE_DIR/$lareg -dofin $LGE_DIR/$dof -interp NN
+

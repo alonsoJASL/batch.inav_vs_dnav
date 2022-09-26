@@ -11,7 +11,7 @@ fi
 
 SCRIPT_DIR=$( cd -- $( dirname -- ${BASH_SOURCE[0]}  ) &> /dev/null && pwd )
 # CEMRG_DIR="/Users/jsolislemus/dev/build/FORK.JASL.CEMRG/MITK-build/bin"
-CEMRG_DIR="$HOME/dev/build/FORK.CEMRG/MITK-build/bin"
+CEMRG_DIR="$HOME/dev/build/FORK.JASL.CEMRG/MITK-build/bin"
 
 DIR=$1
 N=$2
