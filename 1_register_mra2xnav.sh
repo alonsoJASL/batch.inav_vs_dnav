@@ -10,8 +10,8 @@ if [ $# -eq 0 ] ; then
 fi
 
 SCRIPT_DIR=$( cd -- $( dirname -- ${BASH_SOURCE[0]}  ) &> /dev/null && pwd )
-# MIRTK_DIR="$HOME/syncdir/cemrgapp_prebuilds/v2018.04.2/linux/Externals/MLib" # linux
-MIRTK_DIR="$HOME/dev/libraries/MLib" # macOS
+MIRTK_DIR="$HOME/syncdir/cemrgapp_prebuilds/v2018.04.2/linux/Externals/MLib" # linux
+# MIRTK_DIR="$HOME/dev/libraries/MLib" # macOS
 
 DIR=$1
 N=$2
