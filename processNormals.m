@@ -2,12 +2,14 @@
 % Select transformation file
 clc
 
-DIR='/media/jsl19/sandisk/09-dnav_vs_inav/umc';
+% DIR='/media/jsl19/sandisk/09-dnav_vs_inav/umc';
+DIR='/Volumes/sandisk/09-dnav_vs_inav/umc';
 subdirs={'local', 'docker'};
 N=1:26;
 X={'d', 'i'};
 
-mirtk_dir='~/syncdir/cemrgapp_prebuilds/v2018.04.2/linux/Externals/MLib';
+%mirtk_dir='~/syncdir/cemrgapp_prebuilds/v2018.04.2/linux/Externals/MLib';
+mirtk_dir='~/dev/libraries/MLib'
 
 mycommand = fullfile(mirtk_dir, 'info');
 for sd=1:length(subdirs)
@@ -29,7 +31,7 @@ for sd=1:length(subdirs)
                 Rot = rotx(R(1))*roty(R(2))*rotz(R(3));
                 RotDeg = rotx(Rdeg(1))*roty(Rdeg(2))*rotz(Rdeg(3));
 
-                clear mycommand myargs res l
+                clear myargs res l
                 %% Select prodCutter
                 p2f = fullfile(DIR, subdirs{sd}, num2str(N(n)), 'MRA');
                 list = dir(p2f);
@@ -46,7 +48,7 @@ for sd=1:length(subdirs)
                     nx = nx./nx_mag;
                     fclose(fx);
 
-                    fo = fopen(fullfile(p2dof, ['out_' fnames{ix}]), 'w');
+                    fo = fopen(fullfile(p2dof, ['' fnames{ix}]), 'w');
                     nrx = Rot*nx;
                     fprintf(fo, '%f\n%f\n%f\n0', nrx.*nx_mag);
                     fclose(fo);
