@@ -18,5 +18,5 @@ X=$3
 
 LGE_DIR="$DIR/$N/LGE_"$X"NAV"
 
-$SCRIPT_DIR/extract_surf.sh $DIR $N $X "LA-reg.nii"
-$CEMRG_DIR/MitkCemrgApplyExternalClippers -i $LGE_DIR/LA-reg.nii -v 
+$SCRIPT_DIR/extract_surf.sh $DIR $N $X "PVeinsCroppedImage.nii"
+$CEMRG_DIR/MitkCemrgApplyExternalClippers -i $LGE_DIR/LA-reg.nii -mv -v 

@@ -7,9 +7,9 @@ if [ $# -eq 0 ] ; then
 fi
 
 SCRIPT_DIR=$( cd -- $( dirname -- ${BASH_SOURCE[0]}  ) &> /dev/null && pwd )
-# CEMRG_DIR="/Users/jsolislemus/dev/build/FORK.JASL.CEMRG/MITK-build/bin"
-CEMRG_DIR="$HOME/dev/build/FORK.JASL.CEMRG/MITK-build/bin"
+# CEMRG_DIR="$HOME/dev/build/FORK.JASL.CEMRG/MITK-build/bin"
 # MIRTK_DIR="$HOME/syncdir/cemrgapp_prebuilds/v2018.04.2/linux/Externals/MLib"
+CEMRG_DIR="/Users/jsolislemus/dev/build/FORK.JASL.CEMRG/MITK-build/bin" # macos
 MIRTK_DIR="$HOME/dev/libraries/MLib" # macOS
 
 DIR=$1
@@ -17,6 +17,6 @@ N=$2
 X=$3
 
 LGE_DIR="$DIR/$N/LGE_"$X"NAV"
+xnav=$(ls $LGE_DIR | grep dcm-LGE)
 
-$SCRIPT_DIR/extract_surf.sh $DIR $N $X "LA-reg.nii"
-$CEMRG_DIR/MitkCemrgApplyExternalClippers -i $LGE_DIR/LA-reg.nii -v 
+$CEMRG_DIR/MitkCemrgScarProjectionOptions -i $LGE_DIR/$xnav -m 1 -svp --multi-thresholds --output-subfolder OUTPUT_SWEEP -v
