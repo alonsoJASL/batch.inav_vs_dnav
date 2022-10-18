@@ -3,12 +3,12 @@ clc
 
 %% Process results from table
 
-DIR='/Volumes/sandisk/09-dnav_vs_inav/umc';
+% DIR='/Volumes/sandisk/09-dnav_vs_inav/umc';
+DIR = '/media/jsl19/sandisk/09-dnav_vs_inav/umc';
 subdirs={'local', 'docker'};
 N=sort([10 11 12 13 14 15 16 17 18 19 2  20 21 22 23 24 25 26 5  6  7  8  9]);
 
 sd=1;
-n=1;
 
 resfolder= fullfile(DIR, ['results_' subdirs{sd}]);
 T=readtable(fullfile(resfolder,'stats.csv'));
