@@ -16,7 +16,7 @@ T=readtable(fullfile(resfolder,'stats.csv'));
 exp_struc(1).odir_sub='SWEEP';
 exp_struc(1).thres_vect=(0.7:0.01:1.59)';
 exp_struc(2).odir_sub='AVG_MEDIAN';
-exp_struc(2).thres_vect=[1.13;1.1504];
+exp_struc(2).thres_vect=[1.13; 1.1504];
 exp_struc(3).odir_sub='OPTIM_THRES';
 exp_struc(3).thres_vect=(1.05:0.0001:1.2901)';
 
@@ -63,7 +63,9 @@ switch exp_number
         errors_median_thres = abs(scores_w_median_thres_1d13-Td.FIB_SCORE);
 
     case 3 % optimise threshold randomly
-        num_attempts=100000;
+        close all
+
+        num_attempts=10000;
         RESULT = zeros(num_attempts, 5);
 
         scale=100;
@@ -73,7 +75,7 @@ switch exp_number
 
         for attempt=1:num_attempts
             lenN = length(N);
-            num_picks = 19;
+            num_picks = 18;
             num_test = lenN - num_picks;
             perm_indx = randperm(lenN, num_picks);
             test_indx = find(~ismember(N,N(perm_indx)));
@@ -99,6 +101,10 @@ switch exp_number
 
         [a,b] = min(sum(RESULT(:,[2 4]),2));
         fprintf('Score is: %f\n', RESULT(b,1));
+
+        boxplot(RESULT(:,2), RESULT(:,1));
+
+
 end
 
 %% Collect data
