@@ -10,7 +10,7 @@ fi
 
 SCRIPT_DIR=$( cd -- $( dirname -- ${BASH_SOURCE[0]}  ) &> /dev/null && pwd )
 
-IMATOOLS_DIR="$HOME/dev/python/imatools/apps"
+IMATOOLS_DIR="$HOME/dev/python/imatools/imatools"
 
 CEMRG_DIR="$HOME/dev/build/FORK.CEMRG/MITK-build/bin"
 MIRTK_DIR="$HOME/syncdir/cemrgapp_prebuilds/v2018.04.2/linux/Externals/MLib"
@@ -34,8 +34,12 @@ dNAV_MSH="LGE_dNAV/OUTPUT/Normalised_IIR_MaxScar-single-voxel"
 iNAV_MSH=$MNAME
 FNAME="$DIR/spatial_correspondence.csv"
 
-# Thresholds   :   MEAN    MEDIAN  
+if [ ! -f "$FNAME" ]; then
+    echo "th_dnav, th_inav, fibrosis_d, fibrosis_i, jaccard, precision, recall, accuracy" > $FNAME 
+fi
+
+# Thresholds   :   MEAN    MEDIAN   TH_1      TH_2    TH_3
 threshold_array=("1.1300" "1.1504" "1.1205" "1.265" "1.1367")
-for ta in ${threshold_array}; do 
-    python $IMATOOLS_DIR/compare_fibrosis_overlap.py -d $CASE_DIR -imsh0 $iNAV_MSH -t0 "1.2" -t1 $ta -thio >> $FNAME 
+for ta in ${threshold_array[@]}; do 
+    python $IMATOOLS_DIR/compare_fibrosis_overlap.py -d $CASE_DIR -imsh0 $dNAV_MSH -t0 1.2 -imsh1 $iNAV_MSH -t1 $ta -thio >> $FNAME 
 done
