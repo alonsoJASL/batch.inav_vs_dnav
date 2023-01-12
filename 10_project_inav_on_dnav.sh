@@ -25,13 +25,13 @@ dNAV_DIR="$CASE_DIR/LGE_dNAV/OUTPUT"
 iNAV_DIR="$CASE_DIR/LGE_iNAV/OUTPUT"
 
 FIBROSIS_MSH="Normalised_IIR_MaxScar-single-voxel" # always the normalised
-MNAME="Scalars_i_on_d"
+MNAME="Scalars_i_on_d_pts"
 
-python $IMATOOLS_DIR/project_scalars_on_mesh.py -sdir $dNAV_DIR -tdir $iNAV_DIR -smsh $FIBROSIS_MSH -tmsh $FIBROSIS_MSH -odir "$CASE_DIR" -omsh $MNAME -dt cell 
+# python $IMATOOLS_DIR/project_scalars_on_mesh.py -sdir $dNAV_DIR -tdir $iNAV_DIR -smsh $FIBROSIS_MSH -tmsh $FIBROSIS_MSH -odir "$CASE_DIR" -omsh $MNAME -dt cell 
 
 dNAV_MSH="LGE_dNAV/OUTPUT/Normalised_IIR_MaxScar-single-voxel"
 iNAV_MSH=$MNAME
-FNAME="$DIR/spatial_correspondence.csv"
+FNAME="$DIR/spatial_correspondence_pts.csv"
 
 if [ ! -f "$FNAME" ]; then
     echo "th_dnav, th_inav, fibrosis_d, fibrosis_i, performance, perf_name" > $FNAME 
@@ -40,5 +40,5 @@ fi
 # Thresholds   :   MEAN    MEDIAN   TH_1      TH_2    TH_3
 threshold_array=("1.2" "1.1300" "1.1504" "1.1205" "1.265" "1.1367")
 for ta in ${threshold_array[@]}; do 
-    python $IMATOOLS_DIR/compare_fibrosis_overlap.py -d $CASE_DIR -imsh0 $dNAV_MSH -t0 1.2 -imsh1 $iNAV_MSH -t1 $ta -thio >> $FNAME 
+    python $IMATOOLS_DIR/compare_fibrosis_overlap.py -d $CASE_DIR -imsh0 $dNAV_MSH -t0 1.2 -imsh1 $iNAV_MSH -t1 $ta -thio --data-type "point" >> $FNAME 
 done
