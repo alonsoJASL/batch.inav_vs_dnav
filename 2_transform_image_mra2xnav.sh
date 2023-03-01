@@ -3,28 +3,31 @@ set -euo pipefail
 
 if [ $# -eq 0 ] ; then
     >&2 echo 'No arguments supplied'
+    >&2 echo '    BASE_DIR'
     exit 1
 fi
 
 SCRIPT_DIR=$( cd -- $( dirname -- ${BASH_SOURCE[0]}  ) &> /dev/null && pwd )
-MIRTK_DIR="$HOME/syncdir/cemrgapp_prebuilds/v2018.04.2/linux/Externals/MLib"
-# MIRTK_DIR="$HOME/dev/libraries/MLib" # macOS
+# MIRTK_DIR="$HOME/syncdir/cemrgapp_prebuilds/v2018.04.2/linux/Externals/MLib"
+MIRTK_DIR="$HOME/dev/libraries/MLib" # macOS
 
 DIR=$1
-N=$2
-X=$3
 
-LGE_DIR="$DIR/$N/LGE_"$X"NAV"
-MRA_DIR="$DIR/$N/MRA"
+dNAV_DIR="$DIR/dNav"
+iNAV_DIR="$DIR/iNav"
 
-la="LA.nii"
-lareg="LA-reg.nii"
-dof="mra2"$X"nav.dof"
+la="PVeinsCroppedImage.nii"
+lareg="PVeinsCroppedImage.nii"
+ddof="mra2dnav.dof"
+idof="mra2inav.dof"
 
-echo "INPUT   : $MRA_DIR/$la"
-echo "DOF FILE: $dof"
+echo "INPUT   : $DIR/$la"
+echo "DOF FILE: $ddof"
 echo "OUTPUT  : $lareg"
+$MIRTK_DIR/transform-image $DIR/$la $dNAV_DIR/$lareg -dofin $dNAV_DIR/$ddof -interp NN
 
-# echo "$MIRTK_DIR/transform-image $MRA/$la $LGE_DIR/$lareg -dofin $LGE_DIR/$xnav -interp NN "
-$MIRTK_DIR/transform-image $MRA_DIR/$la $LGE_DIR/$lareg -dofin $LGE_DIR/$dof -interp NN
+echo "INPUT   : $DIR/$la"
+echo "DOF FILE: $idof"
+echo "OUTPUT  : $lareg"
+$MIRTK_DIR/transform-image $DIR/$la $iNAV_DIR/$lareg -dofin $iNAV_DIR/$idof -interp NN
 

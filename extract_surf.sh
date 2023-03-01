@@ -3,6 +3,8 @@ set -euo pipefail
 
 if [ $# -eq 0 ] ; then
     >&2 echo 'No arguments supplied'
+    >&2 echo '  DIR'
+    >&2 echo '  FNAME'
     exit 1
 fi
 
@@ -12,15 +14,12 @@ CEMRG_DIR="$HOME/dev/build/FORK.JASL.CEMRG/MITK-build/bin"
 # MIRTK_DIR="$HOME/syncdir/cemrgapp_prebuilds/v2018.04.2/linux/Externals/MLib"
 MIRTK_DIR="$HOME/dev/libraries/MLib" # macOS
 
-DIR=$1
-N=$2
-X=$3
-fname=$4
+BASE_DIR=$1
+fname=$2
 
-LGE_DIR="$DIR/$N/LGE_"$X"NAV"
 
-echo "Extract surface: $LGE_DIR/$fname"
+echo "Extract surface: $BASE_DIR/$fname"
 
-$MIRTK_DIR/close-image $LGE_DIR/$fname $LGE_DIR/segmentation.s.nii -iterations 1 
-$MIRTK_DIR/extract-surface $LGE_DIR/segmentation.s.nii $LGE_DIR/segmentation.vtk -isovalue 0.5 -blur 0
-$MIRTK_DIR/smooth-surface $LGE_DIR/segmentation.vtk $LGE_DIR/segmentation.vtk -iterations 10 
+$MIRTK_DIR/close-image $BASE_DIR/$fname $BASE_DIR/segmentation.s.nii -iterations 1 
+$MIRTK_DIR/extract-surface $BASE_DIR/segmentation.s.nii $BASE_DIR/segmentation.vtk -isovalue 0.5 -blur 0
+$MIRTK_DIR/smooth-surface $BASE_DIR/segmentation.vtk $BASE_DIR/segmentation.vtk -iterations 10 
