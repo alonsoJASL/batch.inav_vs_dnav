@@ -26,4 +26,5 @@ outp=$5
 LGE_DIR="$DIR/$N/LGE_"$X"NAV"
 xnav=$(ls $LGE_DIR | grep dcm-LGE)
 
+echo "$CEMRG_DIR/MitkCemrgScarProjectionOptions -i $LGE_DIR/$xnav -m 1 -svp --threshold-values $TH --output-subfolder OUTPUT_$outp -v"
 $CEMRG_DIR/MitkCemrgScarProjectionOptions -i $LGE_DIR/$xnav -m 1 -svp --threshold-values $TH --output-subfolder OUTPUT_$outp -v
