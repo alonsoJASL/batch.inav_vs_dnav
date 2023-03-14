@@ -18,8 +18,8 @@ MIRTK_DIR="$HOME/dev/libraries/MLib" # macOS
 BASE_DIR=$1
 SEG_NAME=$2
 OUT_SDIR=$3
+THRESHOLDS=$4
 
 xnav=$(ls $BASE_DIR | grep dcm-LGE)
 
-$CEMRG_DIR/MitkCemrgScarProjectionOptions -i $BASE_DIR/$xnav -seg $SEG_NAME -o $OUT_SDIR -m 0 -tv 0.97,1.2,1.32 -v 
-
+$CEMRG_DIR/MitkCemrgScarProjectionOptions -i $BASE_DIR/$xnav -seg $SEG_NAME -o $OUT_SDIR -m 0 -tv $THRESHOLDS -v

@@ -15,14 +15,8 @@ th_fname = 'IIR_MaxScar-repeated-voxels_prodStats.txt';
 st.cases = cases;
 st.new_mean_bp = zeros(length(cases), 1, 'double');
 st.new_std_bp = zeros(length(cases), 1, 'double');
-st.new_0d97 = zeros(length(cases), 1, 'double');
-st.new_1d2 = zeros(length(cases), 1, 'double');
-st.new_1d32 = zeros(length(cases), 1, 'double');
 st.old_mean_bp = zeros(length(cases), 1, 'double');
 st.old_std_bp = zeros(length(cases), 1, 'double');
-st.old_0d97 = zeros(length(cases), 1, 'double');
-st.old_1d2 = zeros(length(cases), 1, 'double');
-st.old_1d32 = zeros(length(cases), 1, 'double');
 
 for ix=1:length(cases)
     pth = fullfile(p2f, cases{ix}, sdirs);
@@ -31,21 +25,22 @@ for ix=1:length(cases)
 
     if exist(old_p, "dir")
         fname = fullfile(old_p, th_fname);
-        [mn, sd, ~, scores] = readParseProdStats(fname);
+        [mn, sd, thress, scores] = readParseProdStats(fname);
         st.old_mean_bp(ix) = mn;
         st.old_std_bp(ix) = sd;
-        st.old_0d97(ix) = scores(1);
-        st.old_1d2(ix) = scores(2);
-        st.old_1d32(ix) = scores(3);
+        for jx=1:length(thress)
+            st.(['OLD_' float2str(thress(jx))]) = scores(jx);
+        end
     end
+
     if exist(new_p, "dir")
         fname = fullfile(new_p, th_fname);
-        [mn, sd, ~, scores] = readParseProdStats(fname);
+        [mn, sd, thress, scores] = readParseProdStats(fname);
         st.new_mean_bp(ix) = mn;
         st.new_std_bp(ix) = sd;
-        st.new_0d97(ix) = scores(1);
-        st.new_1d2(ix) = scores(2);
-        st.new_1d32(ix) = scores(3);
+        for jx=1:length(thress)
+            st.(['NEW_' float2str(thress(jx))]) = scores(jx);
+        end
     end
 end
 
@@ -54,6 +49,20 @@ cemrg_info(sprintf('%sNav registration issue', X));
 disp(T);
 
 writetable(T, fullfile(p2f, strcat(X,'Nav_scores.xlsx')));
+%% plot values 
+
+figure(1)
+subplot(131);
+boxplot(get_values(T, '0d97'), get_groups({'Fixed', 'Original'}, size(T,1)));
+title('Scores at IIR=0.97');
+
+subplot(132);
+boxplot(get_values(T, '1d2'), get_groups({'Fixed', 'Original'}, size(T,1)));
+title('Scores at IIR=1.2');
+
+subplot(133);
+boxplot(get_values(T, '1d32'), get_groups({'Fixed', 'Original'}, size(T,1)));
+title('Scores at IIR=1.32');
 
 %% helper functions
 
@@ -73,4 +82,17 @@ thresholds = C{1};
 scores = C{2};
 
 fclose(fi);
+end
+
+function [values] = get_values(T, str)
+values = [T.(strcat('new_', str)); T.(strcat('old_', str))]; 
+end
+
+function [ca] = get_groups(cell_arr, group_size)
+cell_arr = cell_arr(:);
+ca = reshape(repmat(cell_arr, 1, group_size)', length(cell_arr)*group_size, 1);
+end
+
+function [nstr] = float2str(fl)
+nstr = strcat('TH_', strrep(num2str(fl), '.', 'd'));
 end
