@@ -32,12 +32,17 @@ nav = lambda x: x+'Nav' # function to add Nav to the end of the string
 # lists of the processes with an issue (run on PVeinsCroppedImage_new)
 ISSUES = {'iNav' :['2022091601', '2022072202', '2021110501', '2021102901', '2021091001', 
              '2021081301', '2021070902', '2021062501', '2021061101', '2021052102', 
-             '2021051401', '2021032601', '2020110601'], 
+             '2021051401', '2021032601', '2020110601', '2020112701', '2021120301' ], 
          'dNav' : ['2022071502', '2022070102', '2022041301', '2022032501', '2022030401', 
              '2021121701', '2021101501', '2021100802', '2021092401', '2021091001', 
              '2021082701', '2021070902', '2021070901', '2021070202', '2021062501', 
              '2021061101', '2021052101', '2021051401', '2021041601', '2021032601', 
-             '2021031902']}
+             '2021031902', '2020112701', '2021041601', 
+             '2020092901', '2020102701', '2020110601', '2020111302', '2020121801',
+             '2020121802', '2021011501', '2021112601', '2022012801', '2022030401',
+             '2022031101', '2022032501', '2022041301', '2022052702', '2022061001',
+             '2022061002', '2022061701', '2022061702', '2022071502', '2022072201',
+             '2022072202', '2022080501', '2022081902', '2022082602', '2022090201']}
 
 # all paths to dnav and inav folders 
 PROJECT_FOLDERS = { 'dNav' : 'folders_dnav.txt', 'iNav' : 'folders_inav.txt'}
@@ -45,17 +50,9 @@ CEMRG_DIR = {'linux' : "$HOME/dev/build/CEMRG2-U20.04/MITK-build/bin",
              'darwin' : "$HOME/dev/build/FORK.JASL.CEMRG/MITK-build/bin"}
 MIRTK_DIR = {'linux' : "$HOME/syncdir/cemrgapp_prebuilds/v2018.04.2/linux/Externals/MLib", 
              'darwin' : "$HOME/dev/libraries/MLib"}
-def main():
+def main(args):
     """Main function"""
 
-    input_parser = argparse.ArgumentParser(description='Batch processing of carmaf')
-    input_parser.add_argument("-n", "--number", type=int, required=False, help="Number of the folder to process", default=-1)
-    input_parser.add_argument("-f", "--folder", type=str, required=False, help="Folder to process", default='')
-    input_parser.add_argument("-x", "--x", type=str,choices=['d', 'i'], required=True, help="dNav or iNav") 
-    input_parser.add_argument("-m", "--method", type=int, choices=[1, 2], required=True, help="Method (IIR=1, M+x*SD=2)")
-    input_parser.add_argument("-d", "--debug", action="store_true", help="Debug mode")
-    input_parser.add_argument("-v", "--verbose", action="store_true", help="Verbose mode")
-    args = input_parser.parse_args()
 
     #folder to process
     number = args.number
@@ -65,6 +62,7 @@ def main():
 
     base_dic = {'windows': 'D:/', 'linux': '/media/jsl19/sandisk', 'darwin': '/Volumes/sandisk'}
     data_folder = '09-dnav_vs_inav/carmaf/carmaf_cemrg'
+#    data_folder = f'09-dnav_vs_inav/carmaf/outstanding/{x}Nav' # outstanding cases
     method_str = 'IIR' if (m == 1) else 'MxSD'
 
     dir = fullfile(base_dic[chooseplatform()], data_folder)
@@ -78,19 +76,22 @@ def main():
     with open(fullfile(dir, PROJECT_FOLDERS[nav(x)]), 'r') as f: 
         folders_xnav = f.readlines()
 
+    list_of_numbers = []
     if number >= 0 : 
         list_of_numbers = [number]
-        total = 1
     else: # process all folders
         list_of_numbers = range(len(folders_xnav))
-        total = len(folders_xnav)
 
     if args.folder != '':
+        folderlist = args.folder.split(',')
+        list_of_numbers = []
         # find if folder is contained in the list
         for idx, fx in enumerate(folders_xnav):
-            if args.folder in folders_xnav[idx]:
-                list_of_numbers = [idx]
-                break
+            for f in folderlist:
+                if f in folders_xnav[idx]:
+                    list_of_numbers.append(idx)
+
+    total = len(folders_xnav)
 
     log_to_file(log_file, 'Processing ' + str(total) + ' folders')
 
@@ -107,10 +108,6 @@ def main():
             if f.startswith('._'):
                 os.remove(fullfile(this_folder, f))
 
-        print(this_case)
-        print(nav(x))
-        
-    
         mvi = 'tx_prodMVI-by-mra2' + nav(x).lower() + '.vtk'
         pveins = 'PVeinsCroppedImage_new' if (this_case in ISSUES[nav(x)]) else 'PVeinsCroppedImage' 
         pveins += '.nii'
@@ -208,4 +205,14 @@ def main():
                 
 
 if __name__ == '__main__':
-    main()
+    
+    input_parser = argparse.ArgumentParser(description='Batch processing of carmaf')
+    input_parser.add_argument("-n", "--number", type=int, required=False, help="Number of the folder to process", default=-1)
+    input_parser.add_argument("-f", "--folder", type=str, required=False, help="Folder(s) to process", default='')
+    input_parser.add_argument("-x", "--x", type=str,choices=['d', 'i'], required=True, help="dNav or iNav") 
+    input_parser.add_argument("-m", "--method", type=int, choices=[1, 2], required=True, help="Method (IIR=1, M+x*SD=2)")
+    input_parser.add_argument("-d", "--debug", action="store_true", help="Debug mode")
+    input_parser.add_argument("-v", "--verbose", action="store_true", help="Verbose mode")
+    args = input_parser.parse_args()
+    
+    main(args)

@@ -2,7 +2,16 @@ clear all;
 close all;
 clc;
 
+th_fname_list{1} = 'IIR_MaxScar-repeated-voxels_prodStats.txt';
+th_fname_list{2} = 'MplusSD_MaxScar-repeated-voxels_prodStats.txt';
+method{1} = 'IIR';
+method{2} = 'MplusSD';
+
 X = 'd';
+which_method = 2;
+
+th_fname = th_fname_list{which_method};
+name_method = method{which_method};
 
 p2f = '/media/jsl19/sandisk/09-dnav_vs_inav/carmaf/carmaf_cemrg/';
 % p2f = uigetdir('/media/jsl19/sandisk/', 'Select the main folder');
@@ -11,8 +20,6 @@ fi = fopen(fullfile(p2f, ['folders_' X 'nav.txt']), 'r');
 C =  textscan(fi, '%s\n');
 cases = C{1};
 output_dir = 'OUTPUT_SWEEP';
-
-th_fname = 'IIR_MaxScar-repeated-voxels_prodStats.txt';
 
 st.cases = cases;
 st.mean_bp = zeros(length(cases), 1, 'double');
@@ -50,7 +57,7 @@ T = struct2table(st);
 cemrg_info(sprintf('%sNav registration issue', X));
 disp(T);
 
-writetable(T, fullfile(p2f, strcat(X,'Nav_scores.xlsx')));
+writetable(T, fullfile(p2f, strcat(X,'Nav_scores_', name_method,'.xlsx')));
 
 
 %% helper functions
