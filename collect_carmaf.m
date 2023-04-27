@@ -7,19 +7,21 @@ th_fname_list{2} = 'MplusSD_MaxScar-repeated-voxels_prodStats.txt';
 method{1} = 'IIR';
 method{2} = 'MplusSD';
 
-X = 'd';
+X = 'i';
 which_method = 2;
 
 th_fname = th_fname_list{which_method};
 name_method = method{which_method};
 
 p2f = '/media/jsl19/sandisk/09-dnav_vs_inav/carmaf/carmaf_cemrg/';
-% p2f = uigetdir('/media/jsl19/sandisk/', 'Select the main folder');
+%p2f = '/media/jsl19/sandisk/09-dnav_vs_inav/carmaf/outstanding';
+
 fi = fopen(fullfile(p2f, ['folders_' X 'nav.txt']), 'r');
 
 C =  textscan(fi, '%s\n');
 cases = C{1};
-output_dir = 'OUTPUT_SWEEP';
+% output_dir = 'OUTPUT_SWEEP';
+output_dir = 'CORRECTED_SWEEP';
 
 st.cases = cases;
 st.mean_bp = zeros(length(cases), 1, 'double');
@@ -28,6 +30,15 @@ st.std_bp = zeros(length(cases), 1, 'double');
 error_count = 0;
 for ix=1:length(cases)
     sweep_p = fullfile(p2f, cases{ix}, output_dir);
+    if ~exist(sweep_p, "dir")
+        st.mean_bp(ix) = nan;
+        st.std_bp(ix) = nan;
+        for jx=1:length(thress)
+            st.(float2str(thress(jx)))(ix) = nan;
+        end
+        continue
+    end
+
     fname = fullfile(sweep_p, th_fname);
 
     if exist(fname, "file")
@@ -55,9 +66,16 @@ end
 
 T = struct2table(st);
 cemrg_info(sprintf('%sNav registration issue', X));
+
+T(isnan(T.mean_bp), :) = [];
+
 disp(T);
 
-writetable(T, fullfile(p2f, strcat(X,'Nav_scores_', name_method,'.xlsx')));
+
+
+%writetable(T, fullfile(p2f, strcat(X,'Nav_scores_', name_method,'.xlsx')));
+writetable(T, fullfile(p2f, strcat(X,'Nav_scores_corrected_', name_method,'.xlsx')));
+%writetable(T, fullfile(p2f, strcat(X,'Nav_scores_outstanding_', name_method,'.xlsx')));
 
 
 %% helper functions
