@@ -1,10 +1,13 @@
 # To DOs
 
-+ Fix batch 2 pveins_new errors by reorienting to RAI
-+ Check batch_carmaf so it's compatible with outstanding cases 
-  + make lists of issues 
-  + check paths are correct
-+ Run outstanding cases 
-+ Check outstanding cases 
-+ Run collect_carmaf.m, upload excel
-+ Package shells, upload 
+[X] Fix batch 2 pveins_new errors by reorienting to RAI
+[X] Check `batch_carmaf` so it's compatible with outstanding cases 
+  [X] make lists of issues 
+  > (added to the same list)
+  [X] check paths are correct
+[X] Run outstanding cases 
+[X] Check outstanding cases 
+[X] Run `collect_carmaf.m`, 
+[X] upload excel
+[X] Package shells, upload 
+[X] show cases of errors

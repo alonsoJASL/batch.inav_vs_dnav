@@ -54,7 +54,8 @@ ISSUES = {
              '2022092302', '2021102901', '2022050601', '2021062501', '2020102702', '2022070801', 
              '2022093001', '2021120301', '2022052001', '2022041301', '2022061701', '2022061002', 
              '2022030401', '2021052102', '2022031101', '2021112602', '2022032501', '2021011501', 
-             '2021043002', '2021061801'],
+             '2021043002', 
+             '2020112701', '2021120301'], # issues with outstanding cases 
     'dNav': ['2021011501', '2022070102', '2022061702', '2022090201', '2021091001', '2021032601', 
              '2021031902', '2021062501', '2021070202', '2021061101', '2022072202', '2021100802', 
              '2022061001', '2020092901', '2022041301', '2020110601', '2020112701', '2021082701', 
@@ -62,7 +63,8 @@ ISSUES = {
              '2022052702', '2022031101', '2021121701', '2022012801', '2020102701', '2020111302', 
              '2020121801', '2022081902', '2021051401', '2022030401', '2022082602', '2021112601', 
              '2022071502', '2021041601', '2022072201', '2022061701', '2022061002', '2022080501', 
-             '2021101501']
+             '2021101501', 
+             '2020112701', '2021041601']  # issues with outstanding cases
 }
 
 GOOD_FILES = ['2022093001', '2022092301', '2022091602', '2022091601', '2022081901', '2022080502', 
@@ -128,8 +130,15 @@ def main(args):
     log_to_file(log_file, 'Arguments: ' + str(args), print_to_console=True)
 
     # read the list of folders
-    with open(fullfile(dir, PROJECT_FOLDERS[nav(x)]), 'r') as f: 
-        folders_xnav = f.readlines()
+    try:
+        with open(fullfile(dir, PROJECT_FOLDERS[nav(x)]), 'r') as f: 
+            folders_xnav = f.readlines()
+    except FileNotFoundError:
+        error_log(log_file, f'File {PROJECT_FOLDERS[nav(x)]} not found')
+        return
+    except UnicodeDecodeError:
+        error_log(log_file, f'File {PROJECT_FOLDERS[nav(x)]} cannot be read, check the encoding')
+        return
 
     list_of_numbers = []
     if number >= 0 : 
@@ -154,7 +163,8 @@ def main(args):
     paths_xnav = [fullfile(dir, q.strip()) for q in folders_xnav]
     for n in list_of_numbers:
         # extract case from this_folder
-        this_case = folders_xnav[n].strip().split('/')[0]
+        # this_case = folders_xnav[n].strip().split('/')[0]
+        this_case = folders_xnav[n].strip().split('/')[1] # outstanding cases
         this_folder = paths_xnav[n]
 
         if ignore and (this_case in GOOD_FILES): 
