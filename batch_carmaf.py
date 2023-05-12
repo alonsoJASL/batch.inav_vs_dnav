@@ -44,7 +44,7 @@ def run_cmd(script_dir, cmd_name, arguments, debug = False ) :
 nav = lambda x: x+'Nav' # function to add Nav to the end of the string
 
 # constants
-# lists of the processes with an issue (run on PVeinsCroppedImage_new)
+# lists of the processes with an issue (run on PVeinsCroppedImage_new) 
 ISSUES = {
     'iNav': ['2022042201', '2022082602', '2021081301', '2021032601', '2020121802', '2021051401', 
              '2021111201', '2022090201', '2022052701', '2022080502', '2021112601', '2022070101', 
@@ -54,7 +54,7 @@ ISSUES = {
              '2022092302', '2021102901', '2022050601', '2021062501', '2020102702', '2022070801', 
              '2022093001', '2021120301', '2022052001', '2022041301', '2022061701', '2022061002', 
              '2022030401', '2021052102', '2022031101', '2021112602', '2022032501', '2021011501', 
-             '2021043002'],
+             '2021043002', '2021061801'],
     'dNav': ['2021011501', '2022070102', '2022061702', '2022090201', '2021091001', '2021032601', 
              '2021031902', '2021062501', '2021070202', '2021061101', '2022072202', '2021100802', 
              '2022061001', '2020092901', '2022041301', '2020110601', '2020112701', '2021082701', 
@@ -115,8 +115,8 @@ def main(args):
     debug = args.debug
 
     base_dic = {'windows': 'D:/', 'linux': '/media/jsl19/sandisk', 'darwin': '/Volumes/sandisk'}
-    # data_folder = '09-dnav_vs_inav/carmaf/carmaf_cemrg'
-    data_folder = '09-dnav_vs_inav/carmaf/outstanding' # outstanding cases
+    data_folder = '09-dnav_vs_inav/carmaf/carmaf_cemrg'
+    # data_folder = '09-dnav_vs_inav/carmaf/outstanding' # outstanding cases
     method_str = 'IIR' if (m == 1) else 'MxSD'
 
     dir = fullfile(base_dic[chooseplatform()], data_folder)
